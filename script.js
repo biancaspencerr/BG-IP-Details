@@ -109,42 +109,4 @@ document.addEventListener("DOMContentLoaded", () => {
       alert("Please select a valid dropdown button!");
     }
   });
-
-  // Predefined colors array
-  const colors = [
-    "#c3c3c3",
-    "#fffdab",
-    "#ffca92",
-    "#818181",
-    "#aaefcf",
-    "#fff74c",
-    "#ff7c00",
-    "#1e955e",
-    "#ffd400",
-    "#a4c8db",
-    "#9cdb98",
-    "#9cdb98",
-    "#5b5b5b",
-    "#0099b0",
-    "#dcdcdc",
-    "#dcdcdc",
-    "#ffd400",
-    "#ffd400",
-  ];
-
-  // Select all dropdown buttons
-  const buttons = document.querySelectorAll(".dropdown-btn");
-
-  // Apply colors dynamically
-  buttons.forEach((button) => {
-    // Get the index from the data attribute
-    const index = parseInt(button.getAttribute("data-index"), 10);
-
-    // Retrieve the color based on the index (looping if needed)
-    const color = colors[(index - 1) % colors.length]; // Adjust for 0-based array indexing
-
-    // Apply the color to the button
-    button.style.backgroundColor = color;
-    button.style.color = "#333"; // Ensure contrast for text
-  });
 });
