@@ -17,20 +17,23 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // Handle sub-menu visibility
-  const dropdownItems = document.querySelectorAll(".dropdown-menu li");
-  dropdownItems.forEach((item) => {
+  const attachSubMenuListeners = (item) => {
     item.addEventListener("mouseenter", function () {
-      const subMenus = this.querySelectorAll(".sub-menu, .sub-menu2");
+      const subMenus = this.querySelectorAll(".sub-menu2");
       subMenus.forEach((subMenu) => subMenu.classList.add("show"));
-      this.style.backgroundColor = "#f0f0f0"; // Change the background color on hover
+      this.style.backgroundColor = "#f0f0f0"; // Change the background color
     });
 
     item.addEventListener("mouseleave", function () {
-      const subMenus = this.querySelectorAll(".sub-menu, .sub-menu2");
+      const subMenus = this.querySelectorAll(".sub-menu2");
       subMenus.forEach((subMenu) => subMenu.classList.remove("show"));
-      this.style.backgroundColor = ""; // Revert the background color
+      this.style.backgroundColor = ""; // Reset background color
     });
-  });
+  };
+
+  // Attach listeners to existing items
+  const dropdownItems = document.querySelectorAll(".dropdown-menu li");
+  dropdownItems.forEach(attachSubMenuListeners);
 
   // Close dropdown menus when clicking outside
   document.addEventListener("click", () => {
@@ -38,42 +41,110 @@ document.addEventListener("DOMContentLoaded", () => {
       menu.classList.remove("show");
     });
   });
-});
 
-// Predefined colors array
-const colors = [
-  "#c3c3c3",
-  "#fffdab",
-  "#ffca92",
-  "#818181",
-  "#aaefcf",
-  "#fff74c",
-  "#ff7c00",
-  "#1e955e",
-  "#ffd400",
-  "#a4c8db",
-  "#9cdb98",
-  "#9cdb98",
-  "#5b5b5b",
-  "#0099b0",
-  "#dcdcdc",
-  "#dcdcdc",
-  "#ffd400",
-  "#ffd400",
-];
+  // Modal Logic
+  const modal = document.getElementById("modal");
+  const closeModal = document.getElementById("close-modal");
+  const submenuForm = document.getElementById("submenu-form");
 
-// Select all dropdown buttons
-const buttons = document.querySelectorAll(".dropdown-btn");
+  // Open modal when the add button is clicked
+  const addButton = document.getElementById("add-button");
+  if (addButton) {
+    addButton.addEventListener("click", (e) => {
+      e.stopPropagation();
+      modal.style.display = "block";
+    });
+  }
 
-// Apply colors dynamically
-buttons.forEach((button) => {
-  // Get the index from the data attribute
-  const index = parseInt(button.getAttribute("data-index"), 10);
+  // Close modal logic
+  closeModal.addEventListener("click", () => {
+    modal.style.display = "none";
+  });
 
-  // Retrieve the color based on the index (looping if needed)
-  const color = colors[(index - 1) % colors.length]; // Adjust for 0-based array indexing
+  window.addEventListener("click", (e) => {
+    if (e.target === modal) {
+      modal.style.display = "none";
+    }
+  });
 
-  // Apply the color to the button
-  button.style.backgroundColor = color;
-  button.style.color = "#333"; // Ensure contrast for text
+  // Handle form submission to add submenus
+  submenuForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+
+    const selectedButtonIndex = document.getElementById("button-select").value;
+    const dropdownMenu = document.querySelector(
+      `.dropdown-btn[data-index="${selectedButtonIndex}"]`
+    )?.nextElementSibling;
+
+    if (dropdownMenu) {
+      // Collect input data
+      const inputs = document.querySelectorAll(".submenu-input");
+      let name = "";
+      let detailsHTML = '<ul class="sub-menu2">';
+      inputs.forEach((input) => {
+        if (input.value.trim()) {
+          if (input.name === "Name") {
+            name = input.value;
+          } else {
+            detailsHTML += `<li><strong>${input.name}:</strong> ${input.value}</li>`;
+          }
+        }
+      });
+      detailsHTML += "</ul>";
+
+      if (name) {
+        // Add the new item with submenu
+        const newItem = document.createElement("li");
+        newItem.innerHTML = `${name} ${detailsHTML}`;
+        dropdownMenu.appendChild(newItem);
+
+        // Add hover functionality for the new item
+        attachSubMenuListeners(newItem);
+      }
+
+      // Reset form and close modal
+      submenuForm.reset();
+      modal.style.display = "none";
+    } else {
+      alert("Please select a valid dropdown button!");
+    }
+  });
+
+  // Predefined colors array
+  const colors = [
+    "#c3c3c3",
+    "#fffdab",
+    "#ffca92",
+    "#818181",
+    "#aaefcf",
+    "#fff74c",
+    "#ff7c00",
+    "#1e955e",
+    "#ffd400",
+    "#a4c8db",
+    "#9cdb98",
+    "#9cdb98",
+    "#5b5b5b",
+    "#0099b0",
+    "#dcdcdc",
+    "#dcdcdc",
+    "#ffd400",
+    "#ffd400",
+  ];
+
+  // Select all dropdown buttons
+  const buttons = document.querySelectorAll(".dropdown-btn");
+
+  // Apply colors dynamically
+  buttons.forEach((button) => {
+    // Get the index from the data attribute
+    const index = parseInt(button.getAttribute("data-index"), 10);
+
+    // Retrieve the color based on the index (looping if needed)
+    const color = colors[(index - 1) % colors.length]; // Adjust for 0-based array indexing
+
+    // Apply the color to the button
+    button.style.backgroundColor = color;
+    button.style.color = "#333"; // Ensure contrast for text
+  });
 });

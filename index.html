@@ -1055,6 +1055,48 @@
       </ul>
     </div>
 
+    <button id="add-button">Add</button>
+
+    <div id="modal" style="display:none;">
+      <div class="modal-content">
+        <span id="close-modal">&times;</span>
+        <form id="submenu-form">
+          <label for="button-select">Select Button:</label>
+          <select id="button-select">
+            <option value="1">BIG-API</option>
+            <option value="2">BIG-PB2</option>
+            <option value="3">BIG-PS99</option>
+            <option value="4">BIG-TH</option>
+            <option value="5">BIG-EXRATES</option>
+            <option value="6">BIG-MARKER</option>
+            <option value="7">BIG-GRAFANA</option>
+            <option value="8">BIG-MONGODB</option>
+            <option value="9">BIG-SQL-DEV</option>
+            <option value="10">BIG-PS99-METRICS</option>
+            <option value="11">BIG-PSRNG</option>
+            <option value="12">BIG-PS99-NGINX</option>
+            <option value="13">BIG-PSRNG-METRICS</option>
+            <option value="14">BIG-SQL</option>
+            <option value="15">BIG-MR</option>
+            <option value="16">BIG-PB1</option>
+            <option value="17">BIG-DC2</option>
+            <option value="18">BIG-FS1</option>
+          </select>
+          <input type="text" class="submenu-input" name="Name" placeholder="Name" required />
+          <input type="text" class="submenu-input" name="INT IP" placeholder="INT IP" />
+          <input type="text" class="submenu-input" name="Disk" placeholder="Disk" />
+          <input type="text" class="submenu-input" name="CPU" placeholder="CPU" />
+          <input type="text" class="submenu-input" name="Memory" placeholder="Memory" />
+          <input type="text" class="submenu-input" name="OS" placeholder="OS" />
+          <input type="text" class="submenu-input" name="Applications" placeholder="Applications" />
+          <button type="submit">Add</button>
+        </form>
+      </div>
+    </div>
+    
+
+
+
     <script src="script.js"></script>
   </body>
 </html>
