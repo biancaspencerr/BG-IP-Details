@@ -116,6 +116,7 @@ body {
   justify-content: center;
   align-items: center;
   z-index: 1000;
+  font-family: "Montserrat";
 }
 
 .modal-content {
@@ -125,6 +126,7 @@ body {
   width: 400px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   animation: fadeIn 0.3s ease-in-out;
+  font-family: "Montserrat";
 }
 
 .modal-content #close-modal {
