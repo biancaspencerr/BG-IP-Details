@@ -16,25 +16,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  // Handle sub-menu visibility
-  const attachSubMenuListeners = (item) => {
-    item.addEventListener("mouseenter", function () {
-      const subMenus = this.querySelectorAll(".sub-menu2");
-      subMenus.forEach((subMenu) => subMenu.classList.add("show"));
-      this.style.backgroundColor = "#f0f0f0"; // Change the background color
-    });
-
-    item.addEventListener("mouseleave", function () {
-      const subMenus = this.querySelectorAll(".sub-menu2");
-      subMenus.forEach((subMenu) => subMenu.classList.remove("show"));
-      this.style.backgroundColor = ""; // Reset background color
-    });
-  };
-
-  // Attach listeners to existing items
-  const dropdownItems = document.querySelectorAll(".dropdown-menu li");
-  dropdownItems.forEach(attachSubMenuListeners);
-
   // Close dropdown menus when clicking outside
   document.addEventListener("click", () => {
     document.querySelectorAll(".dropdown-menu").forEach((menu) => {
@@ -71,36 +52,36 @@ document.addEventListener("DOMContentLoaded", () => {
   submenuForm.addEventListener("submit", (e) => {
     e.preventDefault();
 
-    const selectedButtonIndex = document.getElementById("button-select").value;
-    const dropdownMenu = document.querySelector(
-      `.dropdown-btn[data-index="${selectedButtonIndex}"]`
-    )?.nextElementSibling;
+    const selectedButton = document.getElementById("button-select").value;
+    const dropdownButton = document.querySelector(
+      `.dropdown-btn[data-index="${selectedButton}"]`
+    );
 
-    if (dropdownMenu) {
+    if (dropdownButton) {
+      const dropdownMenu = dropdownButton.nextElementSibling;
+
       // Collect input data
+      const nameInput = document.getElementById("name-input").value.trim();
+      if (!nameInput) {
+        alert("Please enter a valid Name!");
+        return;
+      }
+
       const inputs = document.querySelectorAll(".submenu-input");
-      let name = "";
-      let detailsHTML = '<ul class="sub-menu2">';
+      let newSubMenuHTML = `<ul class="sub-menu">`;
       inputs.forEach((input) => {
         if (input.value.trim()) {
-          if (input.name === "Name") {
-            name = input.value;
-          } else {
-            detailsHTML += `<li><strong>${input.name}:</strong> ${input.value}</li>`;
-          }
+          newSubMenuHTML += `<li><strong>${
+            input.name
+          }:</strong> ${input.value.trim()}</li>`;
         }
       });
-      detailsHTML += "</ul>";
+      newSubMenuHTML += `</ul>`;
 
-      if (name) {
-        // Add the new item with submenu
-        const newItem = document.createElement("li");
-        newItem.innerHTML = `${name} ${detailsHTML}`;
-        dropdownMenu.appendChild(newItem);
-
-        // Add hover functionality for the new item
-        attachSubMenuListeners(newItem);
-      }
+      // Append new item to the dropdown menu
+      const newListItem = document.createElement("li");
+      newListItem.innerHTML = `${nameInput}${newSubMenuHTML}`;
+      dropdownMenu.appendChild(newListItem);
 
       // Reset form and close modal
       submenuForm.reset();
@@ -108,5 +89,43 @@ document.addEventListener("DOMContentLoaded", () => {
     } else {
       alert("Please select a valid dropdown button!");
     }
+  });
+
+  // Predefined colors array
+  const colors = [
+    "#c3c3c3",
+    "#fffdab",
+    "#ffca92",
+    "#818181",
+    "#aaefcf",
+    "#fff74c",
+    "#ff7c00",
+    "#1e955e",
+    "#ffd400",
+    "#a4c8db",
+    "#9cdb98",
+    "#9cdb98",
+    "#5b5b5b",
+    "#0099b0",
+    "#dcdcdc",
+    "#dcdcdc",
+    "#ffd400",
+    "#ffd400",
+  ];
+
+  // Select all dropdown buttons
+  const buttons = document.querySelectorAll(".dropdown-btn");
+
+  // Apply colors dynamically
+  buttons.forEach((button) => {
+    // Get the index from the data attribute
+    const index = parseInt(button.getAttribute("data-index"), 10);
+
+    // Retrieve the color based on the index (looping if needed)
+    const color = colors[(index - 1) % colors.length]; // Adjust for 0-based array indexing
+
+    // Apply the color to the button
+    button.style.backgroundColor = color;
+    button.style.color = "#333"; // Ensure contrast for text
   });
 });
