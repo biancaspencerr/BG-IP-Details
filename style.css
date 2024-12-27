@@ -103,6 +103,21 @@ body {
   display: block;
 }
 
+/* Hover effect for dropdown items */
+.dropdown-menu li:hover {
+  background-color: #e0e0e0; /* Slightly darker background */
+  color: #333; /* Optional: Darker text color for contrast */
+  cursor: pointer;
+}
+
+/* Hover effect for sub-menu items */
+.sub-menu li:hover,
+.sub-menu2 li:hover {
+  background-color: #d0d0d0; /* Slightly darker background for submenus */
+  color: #222; /* Optional: Darker text color for contrast */
+  cursor: pointer;
+}
+
 /* Modal */
 /* Modal styling */
 #modal {

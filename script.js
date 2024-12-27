@@ -16,10 +16,17 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  // Close dropdown menus when clicking outside
-  document.addEventListener("click", () => {
-    document.querySelectorAll(".dropdown-menu").forEach((menu) => {
-      menu.classList.remove("show");
+  // Handle sub-menu hover effect
+  const dropdownItems = document.querySelectorAll(".dropdown-menu li");
+  dropdownItems.forEach((item) => {
+    item.addEventListener("mouseenter", function () {
+      const subMenus = this.querySelectorAll(".sub-menu, .sub-menu2");
+      subMenus.forEach((subMenu) => subMenu.classList.add("show"));
+    });
+
+    item.addEventListener("mouseleave", function () {
+      const subMenus = this.querySelectorAll(".sub-menu, .sub-menu2");
+      subMenus.forEach((subMenu) => subMenu.classList.remove("show"));
     });
   });
 
@@ -52,40 +59,46 @@ document.addEventListener("DOMContentLoaded", () => {
   submenuForm.addEventListener("submit", (e) => {
     e.preventDefault();
 
-    const selectedButton = document.getElementById("button-select").value;
+    // Get the selected dropdown button by its data-index
+    const selectedIndex = document.getElementById("button-select").value;
     const dropdownButton = document.querySelector(
-      `.dropdown-btn[data-index="${selectedButton}"]`
+      `.dropdown-btn[data-index="${selectedIndex}"]`
     );
 
     if (dropdownButton) {
+      // Get the dropdown menu
       const dropdownMenu = dropdownButton.nextElementSibling;
 
       // Collect input data
-      const nameInput = document.getElementById("name-input").value.trim();
-      if (!nameInput) {
-        alert("Please enter a valid Name!");
-        return;
-      }
-
       const inputs = document.querySelectorAll(".submenu-input");
-      let newSubMenuHTML = `<ul class="sub-menu">`;
+      let newName = "";
+      let newDetailsHTML = "<ul class='sub-menu2'>";
       inputs.forEach((input) => {
         if (input.value.trim()) {
-          newSubMenuHTML += `<li><strong>${
-            input.name
-          }:</strong> ${input.value.trim()}</li>`;
+          if (input.name === "Name") {
+            newName = input.value.trim();
+          } else {
+            newDetailsHTML += `<li><strong>${
+              input.name
+            }:</strong> ${input.value.trim()}</li>`;
+          }
         }
       });
-      newSubMenuHTML += `</ul>`;
+      newDetailsHTML += "</ul>";
 
-      // Append new item to the dropdown menu
-      const newListItem = document.createElement("li");
-      newListItem.innerHTML = `${nameInput}${newSubMenuHTML}`;
-      dropdownMenu.appendChild(newListItem);
+      if (newName) {
+        // Add a new list item with submenu
+        const newListItem = document.createElement("li");
+        newListItem.textContent = newName;
+        newListItem.innerHTML += newDetailsHTML;
+        dropdownMenu.appendChild(newListItem);
 
-      // Reset form and close modal
-      submenuForm.reset();
-      modal.style.display = "none";
+        // Reset form and close modal
+        submenuForm.reset();
+        modal.style.display = "none";
+      } else {
+        alert("Please enter a valid Name!");
+      }
     } else {
       alert("Please select a valid dropdown button!");
     }
@@ -113,18 +126,10 @@ document.addEventListener("DOMContentLoaded", () => {
     "#ffd400",
   ];
 
-  // Select all dropdown buttons
-  const buttons = document.querySelectorAll(".dropdown-btn");
-
   // Apply colors dynamically
-  buttons.forEach((button) => {
-    // Get the index from the data attribute
+  dropdownButtons.forEach((button) => {
     const index = parseInt(button.getAttribute("data-index"), 10);
-
-    // Retrieve the color based on the index (looping if needed)
-    const color = colors[(index - 1) % colors.length]; // Adjust for 0-based array indexing
-
-    // Apply the color to the button
+    const color = colors[(index - 1) % colors.length];
     button.style.backgroundColor = color;
     button.style.color = "#333"; // Ensure contrast for text
   });
